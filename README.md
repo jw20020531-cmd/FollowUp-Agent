@@ -1,6 +1,6 @@
 # FollowUp AI
 
-Phase 1 project skeleton for a lightweight AI follow-up assistant for small sales teams.
+Evidence-first prototype for tracking email follow-ups in student groups and small teams.
 
 ## Product direction
 
@@ -13,16 +13,16 @@ FollowUp AI is taking an evidence-first path. The first MVP will prove the manua
 
 ## Architecture
 
-- `frontend/` — Next.js App Router, TypeScript, and a minimal follow-up inbox UI.
-- `backend/` — FastAPI service with versioned health routes and a SQLAlchemy/PostgreSQL connection foundation.
-- `db` — PostgreSQL 16 via Docker Compose.
+- `frontend/` - Next.js App Router, TypeScript, and a read-only demo inbox.
+- `backend/` - FastAPI service with persistent follow-up records. SQLite is the local default.
+- `db` - optional PostgreSQL 16 via Docker Compose.
 - `backend/migrations/` — checked-in migration location for future schema changes.
 
 OAuth, Gmail sync, AI analysis, sending, and reply detection are intentionally not implemented in Phase 1.
 
 ## Run the manual MVP locally
 
-The manual follow-up API can run before Docker and PostgreSQL are installed. In that mode, `/api/health` and `/api/follow-ups` work, while `/api/health/db` returns `{"status":"unavailable"}` until the database is running.
+The backend uses a local SQLite database by default. No Docker installation is needed for the API. The web page displays sample data; create and status updates are available through the API.
 
 ```powershell
 cd backend
@@ -32,12 +32,12 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-Open <http://localhost:8000/api/follow-ups> to view the demo follow-up candidates.
+Open <http://localhost:8000/api/follow-ups> to view seeded demo candidates. The interactive API documentation is at <http://localhost:8000/docs>.
 
 ## Run locally with PostgreSQL
 
-1. Copy `.env.example` to `.env`.
-2. Start PostgreSQL: `docker compose up -d db`.
+1. Start PostgreSQL: `docker compose up -d db`.
+2. Set `DATABASE_URL` to `postgresql+psycopg://followup:followup@localhost:5432/followup` in the backend shell.
 3. Start the backend:
 
    ```powershell
@@ -65,5 +65,4 @@ The manual MVP follow-up API is available at <http://localhost:8000/api/follow-u
 ```powershell
 docker compose up --build
 ```
-
 
